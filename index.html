@@ -68,23 +68,93 @@
       })
     }
 
+    const addPeople = ((people) => people.forEach((person) => addPerson(person)))
+
     //keyboard handler to animate a flyTo between team members.  Increment on right arrow, decrement on left arrow
-    var curr = 0;
+    var curr = -1;
 
     window.addEventListener("keydown", event => {
       if (event.isComposing || event.keyCode === 39) {
-        curr++
-        if (curr >= people.length) {
-          curr = 0
-        }
-        viewer.camera.flyTo({
-          destination: Cesium.Cartesian3.fromDegrees(people[curr].long, people[curr].lat, 15000),
-          maximumHeight: 15000000
-        });
+        next()
+      }
+      if (event.isComposing || event.keyCode === 37) {
+        previous()
+      }
+      if (event.isComposing || event.keyCode === 38) {
+       home() 
       }
       return;
     })
+
+    function flyToPerson(person) {
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(person.long, person.lat, 15000),
+        maximumHeight: 15000000
+      });
+    }
+
+    function next() {
+      curr++
+      if (curr >= people.length) {
+        curr = 0
+      }
+      flyToPerson(people[curr])
+    }
+
+    function previous() {
+      curr--
+      if (curr < 0) {
+        curr = people.length - 1
+      }
+      flyToPerson(people[curr])
+    }
+
+    function home() {
+      viewer.camera.flyHome(10)
+    }
+
+    function reset() {
+      viewer.camera.flyHome(0)
+      viewer.entities.removeAll()
+      people = []
+      curr = -1
+    }
+
+    //invoking this function will display available commands
+    function help() {
+      const str = `
+Before using this viewer, please create a collection of items to visualize of form:
+
+  [{ "name": "alice", "lat": 30, "long" : -30, "image": "./images/jm.png" }] 
+
+and add them to the viewer with the addPeople command.
+
+The format for an individual person is:
+{
+    "name": "Name of Person - not used",
+    "lat": "latitude in degrees",
+    "long": "longitued in degress",
+    "image": "an image from the local filesystem to display, no remote origins allowed"
+}
+
+Functional Commands:
+addPeople(arrayOfPeople) - adds an array of people
+next() - flies camera to the next item in the collection
+prev() - flies camera to previous item in the collection
+home() - flies camera back out to the world view
+reset() - returns the visualizaiton to the default state
+
+Keyboard Commands: (with web UI in focus)
+Left Arrow Key - next()
+Right Arrow Key - prev()
+Up - home()
+      `
+
+      console.log(str)
+
+    }
       
+    help()
 
     </script>
   </body>
