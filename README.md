@@ -1,3 +1,5 @@
+_This is a WIP in progress and README is for myself_
+
 # team-globe
 Demo for visualizing a remote team (or any collection of items) on a 3D globe
 
@@ -7,7 +9,7 @@ A secondary is to use the console of the browser as the interface and not have t
 `npm start`
 
 ## Add Team Members
-Edit index.html, but I'd like to add them in via the console or pass them in via paremeters when loading the globe
+Edit index.html, but I'd like to add them in via the console or pass them in via parameters when loading the globe
 
 Can add a user via the console
 
