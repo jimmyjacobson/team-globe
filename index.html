@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8" />
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <title>Hello World!</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.77/Build/Cesium/Cesium.js"></script>
+    <style>
+      @import url(https://cesium.com/downloads/cesiumjs/releases/1.77/Build/Cesium/Widgets/widgets.css);
+      html,
+      body,
+      #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cesiumContainer"></div>
+    <script>
+
+      /* 
+        Array of people objects representing the team
+      */
+      var people = [{
+        "name": "Jimmy",
+        "lat": 36.048331,
+        "long": -115.115543,
+        "image": "./images/jj2.jpeg"
+      },
+      {
+        "name": "Porter",
+        "lat": 53.882634,
+        "long": -2.130486,
+        "image": "./images/ph2.png"
+      },
+      {
+        "name": "Pawel",
+        "lat": 35.1637,
+        "long": 136.8568,
+        "image": "./images/ps2.jpg"
+      },
+      {
+        "name": "Rich",
+        "lat": 47.684333,
+        "long": -122.3664225,
+        "image": "./images/rh.jpg"
+      }
+    ]
+    
+    //Initialize Cesium Viewer and attach to div
+    //Cesium.Ion.defaultAccessToken = 'your_access_token';
+    
+    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+    const viewer = new Cesium.Viewer('cesiumContainer')
+
+    //todo, maybe, create an array of entities from people to use for references
+
+    //prototype for billboard
+    people.forEach((person) => {
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(person.long, person.lat),
+        billboard: {
+          image: person.image,
+          show: true, // default
+          pixelOffset: new Cesium.Cartesian2(0, 0), // default: (0, 0)
+          eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
+          horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // default
+          verticalOrigin: Cesium.VerticalOrigin.center, // default: CENTER
+          scale: -0.1, // default: 1.0
+          color: Cesium.Color.WHITE, // default: WHITE
+          rotation: Cesium.Math.PI, // default: 0.0
+          alignedAxis: Cesium.Cartesian3.ZERO, // default
+          //width: 25, // default: undefined
+          //height: 50, // default: undefined
+          scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
+        }
+      })
+    })
+
+    //keyboard handler to animate a flyTo between team members.  Increment on right arrow, decrement on left arrow
+    var curr = 0;
+
+    window.addEventListener("keydown", event => {
+      if (event.isComposing || event.keyCode === 39) {
+        curr++
+        if (curr >= people.length) {
+          curr = 0
+        }
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(people[curr].long, people[curr].lat, 15000),
+          maximumHeight: 15000000
+        });
+      }
+      return;
+    })
+      
+
+    </script>
+  </body>
+</html>

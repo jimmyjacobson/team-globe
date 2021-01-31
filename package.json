@@ -1,0 +1,15 @@
+{
+  "name": "team-globe",
+  "version": "0.1.0",
+  "description": "Demo to visualize a team on a 3D globe using Cesium",
+  "main": "index.html",
+  "repository": "git@github.com:jimmyjacobson/team-globe.git",
+  "author": "Jimmy Jacobson <jimmy@codingscape.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+	"start": "npx serve ."
+  },
+  "dependencies": {
+  }
+}
