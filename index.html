@@ -29,34 +29,10 @@
     <div id="cesiumContainer"></div>
     <script>
 
-      /* 
-        Array of people objects representing the team
-      */
-      var people = [{
-        "name": "Jimmy",
-        "lat": 36.048331,
-        "long": -115.115543,
-        "image": "./images/jj2.jpeg"
-      },
-      {
-        "name": "Porter",
-        "lat": 53.882634,
-        "long": -2.130486,
-        "image": "./images/ph2.png"
-      },
-      {
-        "name": "Pawel",
-        "lat": 35.1637,
-        "long": 136.8568,
-        "image": "./images/ps2.jpg"
-      },
-      {
-        "name": "Rich",
-        "lat": 47.684333,
-        "long": -122.3664225,
-        "image": "./images/rh.jpg"
-      }
-    ]
+    /* 
+      Initialize array of people objects representing the team
+    */
+    var people = []
     
     //Initialize Cesium Viewer and attach to div
     //Cesium.Ion.defaultAccessToken = 'your_access_token';
@@ -67,7 +43,11 @@
     //todo, maybe, create an array of entities from people to use for references
 
     //prototype for billboard
-    people.forEach((person) => {
+    people.forEach((person) => addPerson(person));
+
+    //Add to both the people array and to entitites, actually entities is all that really matters except for scrolling
+    function addPerson(person) {
+      people.push(person)
       viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(person.long, person.lat),
         billboard: {
@@ -86,7 +66,7 @@
           scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
         }
       })
-    })
+    }
 
     //keyboard handler to animate a flyTo between team members.  Increment on right arrow, decrement on left arrow
     var curr = 0;
